@@ -5,8 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
     <artifactId>mylife</artifactId>
-    <packaging>pom</packaging>
+    <name>mylife</name>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>主模块，用于模块管理</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

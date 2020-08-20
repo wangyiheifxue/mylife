@@ -5,13 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
     <artifactId>dependencies</artifactId>
+    <name>dependencies</name>
     <version>1.0-SNAPSHOT</version>
-    
+    <packaging>pom</packaging>
+    <description>依赖管理模块</description>
+
     <parent>
         <groupId>com.mylife</groupId>
         <artifactId>mylife</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>..</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
 
