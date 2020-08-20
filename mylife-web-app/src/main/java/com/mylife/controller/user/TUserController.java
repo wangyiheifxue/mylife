@@ -22,9 +22,9 @@ public class TUserController {
     private ITUserService userService;
 
     @RequestMapping("/test")
-    public void test(){
+    public Object test(){
         TUser user = userService.getById(1);
-        System.out.println(user);
+        return user.toString();
     }
 
 }
