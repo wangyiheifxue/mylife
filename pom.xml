@@ -13,6 +13,7 @@
         <module>mylife-service</module>
         <module>mylife-mapper</module>
         <module>mylife-util</module>
+        <module>mylife-web-app</module>
     </modules>
 
 
