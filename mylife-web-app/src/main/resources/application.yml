@@ -1,2 +1,4 @@
-server:
-  port: 80
+#spring
+spring:
+  profiles:
+    active: mysql,dev

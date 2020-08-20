@@ -1,0 +1,33 @@
+#mysql
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/mylife?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+
+##连接池配置
+#  spring.datasource.max-active=20
+#  spring.datasource.initial-size=1
+#  spring.datasource.min-idle=3
+#  spring.datasource.max-wait=60000
+#  spring.datasource.time-between-eviction-runs-millis=60000
+#  spring.datasource.min-evictable-idle-time-millis=300000
+#  spring.datasource.test-while-idle=true
+#  spring.datasource.test-on-borrow=false
+#  spring.datasource.test-on-return=false
+#  spring.datasource.poolPreparedStatements=true
+#  spring.datasource.filters=stat,wall,slf4j
+
+#mybatis-plus
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath:mappers/*/*.xml
+  type-aliases-package: com.mylife.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    cache-enabled: true
