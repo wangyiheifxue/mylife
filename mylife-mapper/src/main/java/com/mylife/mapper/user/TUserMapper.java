@@ -1,7 +1,7 @@
 package com.mylife.mapper.user;
 
+import com.mylife.config.mysqlInjector.base.MyBaseMapper;
 import com.mylife.entity.user.TUser;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author wyh
  * @since 2020-08-20
  */
-public interface TUserMapper extends BaseMapper<TUser> {
+public interface TUserMapper extends MyBaseMapper<TUser> {
+
 
 }
