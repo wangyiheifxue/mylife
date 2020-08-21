@@ -40,6 +40,14 @@
             <version>3.5</version>
         </dependency>
 
+        <!-- lombok 中文翻译：龙目岛（印度尼西亚南部） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+<!--            <scope>provided</scope>-->
+        </dependency>
+
 
     </dependencies>
 
