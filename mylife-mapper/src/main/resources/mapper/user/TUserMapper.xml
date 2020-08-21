@@ -7,6 +7,40 @@
         <id column="id" property="id" />
         <result column="user_name" property="userName" />
         <result column="password" property="password" />
+        <result column="nickname" property="nickname" />
+        <result column="real_name" property="realName" />
+        <result column="id_no" property="idNo" />
+        <result column="email" property="email" />
+        <result column="mobile_phone" property="mobilePhone" />
+        <result column="create_time" property="createTime" />
+        <result column="enable" property="enable" />
+        <result column="status" property="status" />
     </resultMap>
+
+    <sql id="commonSql">
+        <choose>
+            <when test="status != null">
+                a.status = #{status}
+            </when>
+            <otherwise>
+                a.status = 1
+            </otherwise>
+        </choose>
+        <if test="nickname != null and !''.equals(nickname)">
+            and a.nickname like concat('%',#{nickname},'%')
+        </if>
+
+    </sql>
+
+    <select id="listUser" resultType="com.mylife.bean.vo.user.UserVO">
+        select a.*
+        from t_user a
+        <where>
+            <include refid="commonSql"></include>
+        </where>
+        <if test="page != null and pageSize != null">
+            limit #{page},#{pageSize}
+        </if>
+    </select>
 
 </mapper>
