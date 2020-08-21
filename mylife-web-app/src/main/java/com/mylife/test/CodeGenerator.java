@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * 代码生成器演示
- * </p>
+ * @descirption : Mybatis-Plus代码生成器
+ * @author : wyh
+ * @date : 2020/8/21 16:06
  */
-public class MpGenerator {
+public class CodeGenerator {
 	/**
 	 * <p>
 	 * MySQL 生成演示
@@ -31,24 +31,22 @@ public class MpGenerator {
 		gc.setOutputDir("/Users/wyh/java/");
 		gc.setFileOverride(true);
 		gc.setActiveRecord(true);
-		gc.setEnableCache(false);// XML 二级缓存
-		gc.setBaseResultMap(true);// XML ResultMap
-		gc.setBaseColumnList(false);// XML columList
+		gc.setEnableCache(false);//是否在xml中添加二级缓存配置
+		gc.setBaseResultMap(true);
 		gc.setAuthor("wyh");
 		mpg.setGlobalConfig(gc);
 
 		//数据源配置
 		DataSourceConfig dsc = new DataSourceConfig();
 		dsc.setDbType(DbType.MYSQL);
+		dsc.setUrl("jdbc:mysql://localhost:3306/mylife?characterEncoding=utf8");
 		dsc.setDriverName("com.mysql.cj.jdbc.Driver");
 		dsc.setUsername("root");
 		dsc.setPassword("123456");
-		dsc.setUrl("jdbc:mysql://localhost:3306/mylife?characterEncoding=utf8");
 		mpg.setDataSource(dsc);
 
 		//策略配置
 		StrategyConfig strategy = new StrategyConfig();
-		//strategy.setTablePrefix("beautiful_");// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
 		strategy.setInclude(new String[] { "t_user"}); // 需要生成的表
 		mpg.setStrategy(strategy);
@@ -57,7 +55,6 @@ public class MpGenerator {
 		//包配置
 		PackageConfig pc = new PackageConfig();
 		pc.setParent("com.mylife");
-		//pc.setModuleName("entity");
 		pc.setXml("mappers");
 		mpg.setPackageInfo(pc);
 
@@ -72,7 +69,9 @@ public class MpGenerator {
 		};
 		mpg.setCfg(cfg);
 
+		// 执行生成
 		mpg.execute();
+
 		// 打印注入设置
 		System.err.println(mpg.getCfg().getMap().get("abc"));
 	}
