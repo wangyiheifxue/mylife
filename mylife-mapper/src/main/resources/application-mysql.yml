@@ -2,32 +2,37 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/mylife?useUnicode=true&characterEncoding=utf8
-    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mylife?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-
-##连接池配置
-#  spring.datasource.max-active=20
-#  spring.datasource.initial-size=1
-#  spring.datasource.min-idle=3
-#  spring.datasource.max-wait=60000
-#  spring.datasource.time-between-eviction-runs-millis=60000
-#  spring.datasource.min-evictable-idle-time-millis=300000
-#  spring.datasource.test-while-idle=true
-#  spring.datasource.test-on-borrow=false
-#  spring.datasource.test-on-return=false
-#  spring.datasource.poolPreparedStatements=true
-#  spring.datasource.filters=stat,wall,slf4j
+    druid:
+      max-active: 20
+      initial-size: 1
+      min-idle: 3 #最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请。
+      max-wait: 60000
+      min-evictable-idle-time-millis: 300000
+      time-between-eviction-runs-millis: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      filters: stat,wall,slf4j
 
 #mybatis-plus
 mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      table-underline: true
   mapper-locations: classpath:mappers/*/*.xml
   type-aliases-package: com.mylife.entity
   configuration:
     map-underscore-to-camel-case: true
     call-setters-on-nulls: true
     cache-enabled: true
+
+#日志
+logging:
+  level:
+    com.life.mapper: DEBUG

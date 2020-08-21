@@ -17,14 +17,13 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * @descirption : redis配置类
+ * @descirption : redis配置
  * @author : wyh
- * @date : 2020/6/28 11:10
+ * @date : 2020/8/21 11:12
  */
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
-
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory) {
