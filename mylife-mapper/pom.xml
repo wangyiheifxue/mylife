@@ -4,8 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
-    <artifactId>mapper</artifactId>
+    <artifactId>mylife-mapper</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>mylife-mapper</name>
+    <packaging>jar</packaging>
+    <description>mylife 数据源模块</description>
+
+    <parent>
+        <groupId>com.mylife</groupId>
+        <artifactId>mylife-dependencies</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../mylife-dependencies/pom.xml</relativePath>
+    </parent>
 
     <dependencies>
         <!-- mybatis-plus -->
@@ -39,6 +49,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mylife</groupId>
+            <artifactId>mylife-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

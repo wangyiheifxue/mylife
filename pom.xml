@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
     <artifactId>mylife</artifactId>
-    <name>mylife</name>
     <version>1.0-SNAPSHOT</version>
+    <name>mylife</name>
     <packaging>pom</packaging>
     <description>主模块，用于模块管理</description>
 
@@ -16,7 +16,15 @@
         <version>2.3.3.RELEASE</version>
         <relativePath/>
     </parent>
-    
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+    </properties>
+
     <modules>
         <module>mylife-service</module>
         <module>mylife-mapper</module>
@@ -25,6 +33,51 @@
         <module>framework</module>
         <module>mylife-dependencies</module>
     </modules>
+
+    <prerequisites>
+        <maven/>
+    </prerequisites>
+
+    <inceptionYear>2020</inceptionYear>
+
+    <organization>
+        <name>大贺集团</name>
+        <url>http://www.dahejituan.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>wyh</id>
+            <name>王一贺</name>
+            <email>1178879424@qq.com</email>
+            <url>https://github.com/wangyiheifxue</url>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+            <organization>大贺集团</organization>
+            <organizationUrl>http://www.dahejituan.com</organizationUrl>
+            <timezone>8</timezone>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License, Version 1.0</name>
+            <url></url>
+            <distribution>repo</distribution>
+            <comments>暂无</comments>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/wangyiheifxue/mylife</url>
+        <connection>https://github.com/wangyiheifxue/mylife.git</connection>
+        <developerConnection>https://github.com/wangyiheifxue/mylife</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build></build>
 
 
 </project>

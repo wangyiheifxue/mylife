@@ -3,14 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
-    <artifactId>web-app</artifactId>
+    <artifactId>mylife-web-app</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>web-app</name>
-    <description>web-app</description>
+    <name>mylife-web-app</name>
+    <packaging>war</packaging>
+    <description>mylife web应用</description>
+    <url>http://www.mylife.com</url>
 
     <parent>
         <groupId>com.mylife</groupId>
-        <artifactId>dependencies</artifactId>
+        <artifactId>mylife-dependencies</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../mylife-dependencies</relativePath>
     </parent>
@@ -20,12 +22,6 @@
     </properties>
 
     <dependencies>
-        <!-- com.life相关包 -->
-        <dependency>
-            <groupId>com.mylife</groupId>
-            <artifactId>dependencies</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>com.mylife</groupId>
             <artifactId>framework</artifactId>
@@ -33,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>com.mylife</groupId>
-            <artifactId>service</artifactId>
+            <artifactId>mylife-service</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

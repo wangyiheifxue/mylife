@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
-    <artifactId>dependencies</artifactId>
-    <name>dependencies</name>
+    <artifactId>mylife-dependencies</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>mylife-dependencies</name>
     <packaging>pom</packaging>
-    <description>依赖管理模块</description>
+    <description>mylife 依赖管理模块</description>
 
     <parent>
         <groupId>com.mylife</groupId>
         <artifactId>mylife</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath/>
     </parent>
 
 
