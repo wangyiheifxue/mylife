@@ -30,11 +30,12 @@ mybatis-plus:
     call-setters-on-nulls: true
     local-cache-scope: session #一级缓存
     cache-enabled: true #二级缓存
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/mapper/**/*.xml
   type-aliases-package: com.mylife.entity
 
 
 #日志
-logging:
-  level:
-    com.life.mapper: DEBUG
+#logging:
+#  level:
+#    com.mylife.mapper: debug
