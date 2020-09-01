@@ -5,7 +5,9 @@ import com.mylife.bean.vo.user.UserVO;
 import com.mylife.entity.user.TUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,5 +27,7 @@ public interface ITUserService extends IService<TUser> {
      * @return : java.util.List<com.mylife.bean.vo.user.UserVO>
      **/
     List<UserVO> listUser(UserQO qo);
+
+    Map<String,Object> loginByUserName(HttpSession session, String userName, String password, String verificationCode);
 
 }

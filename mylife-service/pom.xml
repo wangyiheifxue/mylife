@@ -10,12 +10,28 @@
     <packaging>jar</packaging>
     <description>mylife 接口模块</description>
 
+    <parent>
+        <groupId>com.mylife</groupId>
+        <artifactId>mylife-dependencies</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../mylife-dependencies/pom.xml</relativePath>
+    </parent>
+
+
     <dependencies>
+
         <dependency>
             <groupId>com.mylife</groupId>
             <artifactId>mylife-mapper</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.mylife</groupId>
+            <artifactId>framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
 

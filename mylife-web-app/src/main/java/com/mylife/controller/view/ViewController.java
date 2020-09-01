@@ -21,7 +21,13 @@ public class ViewController {
      **/
     @RequestMapping({"","/"})
     public String toView(String url){
-        StringBuilder result = new StringBuilder("/pc");
+        boolean isPc = true;
+        StringBuilder result = new StringBuilder();
+        if(isPc){
+            result.append("/pc");
+        }else{
+            result.append("/mob");
+        }
         result.append(url.startsWith("/") ? "" : "/");
         result.append(url);
         return result.toString();
