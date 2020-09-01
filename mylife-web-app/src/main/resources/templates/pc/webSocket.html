@@ -146,7 +146,6 @@
 
                 //重连事件
                 this.websocketHeartbeatJs.onreconnect = function () {
-                    that.connectMessage = '开始重新连接';
                     if (that.offline) {
                         that.reconnect = true;
                         this.opts.reconnectTimeout += 2000;
