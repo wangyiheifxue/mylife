@@ -3,6 +3,7 @@
 <head>
     <title>webSocket</title>
     <#include "/common/pcVersion.html"/>
+    <script src="/js/websocket-heartbeat.js"></script>
     <style>
         .el-header, .el-footer {
             background-color: #B3C0D1;
@@ -47,7 +48,21 @@
             <el-aside width="200px">Aside</el-aside>
             <el-container>
                 <el-main>
-                    <el-button style="width:40%;" type="primary" @click="sendMessage()">发送消息</el-button>
+                    <el-form status-icon label-width="100px">
+                        <el-form-item>
+                            <el-alert
+                                    :title="connectMessage"
+                                    center
+                                    effect="light">
+                            </el-alert>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-input v-model="message" placeholder="输入要发送的消息"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="sendMessage">发送消息</el-button>
+                        </el-form-item>
+                    </el-form>
                 </el-main>
                 <el-footer>Footer</el-footer>
             </el-container>
@@ -55,52 +70,116 @@
     </el-container>
 </div>
 <script>
-    var Main = {
+    var v_webSocket = {
         data() {
             return {
-                username:'wyh',
-                webSocket:'',
+                timer:'',//定时器
+                username: 'wyh',
+                websocketHeartbeatJs: '',
+                offline: false, //是否失去连接
+                reconnect: false, //是否正在重连
+                connectMessage: '', //提示消息
+                connectCloseTime: "", //连接关闭时间
+                message:'',
+                reconnectTimeout:2000, //尝试重连的间隔时间
             }
         },
         mounted() {
             this.$nextTick(function () {
-                this.openWebSocket();
+                this.initWebSocket();
             });
         },
+        destroyed: function () {
+            this.closeWebSocket();
+        },
         methods: {
-            //连接webSocket
-            openWebSocket:function () {
-                if(!this.webSocket){
-                    this.webSocket = new WebSocket('ws://localhost:8088/webSocket/'+this.username);
-                }
+            //初始化webSocket
+            initWebSocket: function () {
+                let that = this;
+
+                this.websocketHeartbeatJs = new WebsocketHeartbeatJs({
+                    url: WEB_SOCKET_BASE_URL + "/webSocket/" + this.username,
+                    pingTimeout: 10000, //每隔x秒发送一次心跳，如果收到任何后端消息定时器将会重置
+                    pongTimeout: 5000, //ping消息发送之后，x秒内没收到后端消息便会认为连接断开
+                    reconnectTimeout: this.reconnectTimeout, //尝试重连的间隔时间
+                    pingMsg: "mylife" //ping消息值
+                });
 
                 //打开事件
-                this.webSocket.onopen = function() {
-                    console.log("websocket已打开");
+                this.websocketHeartbeatJs.onopen = function () {
+                    that.connectMessage = '连接成功';
+                    that.offline = false;
+                    that.reconnect = false;
+                    //重置 尝试重连的间隔时间
+                    setTimeout(function () {
+                        this.opts.reconnectTimeout = that.reconnectTimeout;
+                    }, 2000);
                 };
 
                 //获得消息事件
-                this.webSocket.onmessage = function(msg) {
-                    console.log("收到服务端信息：" + msg.data);
+                this.websocketHeartbeatJs.onmessage = function (e) {
+                    try{
+                        if (e.data !== this.opts.pingMsg) {
+                            console.log("收到消息:" + e.data);
+                        } else {
+                            console.log("收到ping消息:" + e.data);
+                        }
+                    }catch (error) {
+                        console.log(error);
+                    }
+
+                };
+
+                //错误事件
+                this.websocketHeartbeatJs.onerror = () => {
+                    that.offline = true;
+                    that.reconnect = false;
+                    that.connectMessage = '连接发生错误';
                 };
 
                 //关闭事件
-                this.webSocket.onclose = function() {
-                    console.log("websocket已关闭");
+                this.websocketHeartbeatJs.onclose = () => {
+                    that.offline = true;
+                    that.connectMessage = '连接关闭';
+                    that.connectCloseTime = new XDate(new Date()).toString('yyyy-MM-dd HH:mm:ss');
                 };
 
-                //发生了错误事件
-                this.webSocket.onerror = function(error) {
-                    console.log("websocket发生了错误",error);
+                //重连事件
+                this.websocketHeartbeatJs.onreconnect = function () {
+                    that.connectMessage = '开始重新连接';
+                    if (that.offline) {
+                        that.reconnect = true;
+                        this.opts.reconnectTimeout += 2000;
+                        that.doReconnect(this.opts.reconnectTimeout / 1000);
+                    }
                 }
             },
+            //重连
+            doReconnect:function(second){
+                let that = this;
+                this.timer = setInterval(function () {
+                    if (second <= 1) {
+                        clearInterval(that.timer);
+                    } else {
+                        second--;
+                        that.connectMessage = '失去网络连接, ' + second + '秒后重新连接...';
+                    }
+                }, 1000);
+            },
+            //关闭webSocket
+            closeWebSocket: function () {
+                this.websocketHeartbeatJs.close();
+            },
             //发送消息
-            sendMessage:function (message) {
-               this.webSocket.send(message || '测试消息');
+            sendMessage:function () {
+                if(!this.offline){
+                    this.websocketHeartbeatJs.send(this.message || '测试消息');
+                }
             }
         }
     };
-    var Ctor = Vue.extend(Main);
+
+    var Ctor = Vue.extend(v_webSocket);
     new Ctor().$mount('#app');
 </script>
 </body>
