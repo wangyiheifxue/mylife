@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: mysql,util
+server:
+  port: 8088

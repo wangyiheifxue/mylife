@@ -1,4 +1,4 @@
 #spring
 spring:
   profiles:
-    active: mysql,util,dev
+    active: mysql,util,web,dev

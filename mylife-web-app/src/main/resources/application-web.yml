@@ -1,0 +1,28 @@
+spring:
+  session:
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: SESSIONS
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
+  freemarker:
+    template-loader-path: classpath:/templates/
+    prefix:
+    suffix: .html
+    charset: UTF-8
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/resources/,classpath:/static/
+
+server:
+  tomcat:
+    max-http-form-post-size: 100MB #tomcat post请求最大值
+
+#文件上传、读取路径
+web:
+  upload-path:
+  load-path:

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>webSocket</title>
+    <#include "/common/pcVersion.html"/>
+    <style>
+        .el-header, .el-footer {
+            background-color: #B3C0D1;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            background-color: #D3DCE6;
+            color: #333;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>Header</el-header>
+        <el-container>
+            <el-aside width="200px">Aside</el-aside>
+            <el-container>
+                <el-main>
+                    <el-button style="width:40%;" type="primary" @click="sendMessage()">发送消息</el-button>
+                </el-main>
+                <el-footer>Footer</el-footer>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+<script>
+    var Main = {
+        data() {
+            return {
+                username:'wyh',
+                webSocket:'',
+            }
+        },
+        mounted() {
+            this.$nextTick(function () {
+                this.openWebSocket();
+            });
+        },
+        methods: {
+            //连接webSocket
+            openWebSocket:function () {
+                if(!this.webSocket){
+                    this.webSocket = new WebSocket('ws://localhost:8088/webSocket/'+this.username);
+                }
+
+                //打开事件
+                this.webSocket.onopen = function() {
+                    console.log("websocket已打开");
+                };
+
+                //获得消息事件
+                this.webSocket.onmessage = function(msg) {
+                    console.log("收到服务端信息：" + msg.data);
+                };
+
+                //关闭事件
+                this.webSocket.onclose = function() {
+                    console.log("websocket已关闭");
+                };
+
+                //发生了错误事件
+                this.webSocket.onerror = function(error) {
+                    console.log("websocket发生了错误",error);
+                }
+            },
+            //发送消息
+            sendMessage:function (message) {
+               this.webSocket.send(message || '测试消息');
+            }
+        }
+    };
+    var Ctor = Vue.extend(Main);
+    new Ctor().$mount('#app');
+</script>
+</body>
+</html>

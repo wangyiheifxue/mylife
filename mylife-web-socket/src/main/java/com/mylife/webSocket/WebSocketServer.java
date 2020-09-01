@@ -34,6 +34,7 @@ public class WebSocketServer {
         this.session = session;
         this.sid = sid;
         webSocketServerSet.add(this);
+        this.sendMessage(session,sid + "已连接成功");
     }
 
     /**
