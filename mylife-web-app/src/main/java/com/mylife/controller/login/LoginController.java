@@ -1,6 +1,5 @@
 package com.mylife.controller.login;
 
-import com.google.common.collect.Maps;
 import com.mylife.constant.Const;
 import com.mylife.constant.UrlConst;
 import com.mylife.entity.user.TUser;
