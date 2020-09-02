@@ -9,6 +9,7 @@ import com.mylife.entity.user.TUser;
 import com.mylife.mapper.user.TUserMapper;
 import com.mylife.service.user.ITUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mylife.util.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -32,40 +33,30 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     }
 
     @Override
-    public Map<String, Object> loginByUserName(HttpSession session, String userName, String password, String verificationCode) {
-        Map<String, Object> result = Maps.newHashMap();
-        result.put("success",false);
+    public Result loginByMobilePhone(HttpSession session, String mobilePhone, String verificationCode) {
 
-        // 参数检测
-        if(StringUtils.isBlank(userName)){
-            result.put("message","用户名不能为空");
-            return result;
-        }
-        if(StringUtils.isBlank(password)){
-            result.put("message","密码不能为空");
-            return result;
+        //-----参数检测
+        if(StringUtils.isBlank(mobilePhone)){
+            return Result.fail("手机号不能为空");
         }
         if(StringUtils.isBlank(verificationCode)){
-            result.put("message","验证码不能为空");
-            return result;
+            return Result.fail("验证码不能为空");
         }
 
-        // 数据有效性检测
+        //-----数据有效性检测
         QueryWrapper<TUser> qw = new QueryWrapper<>();
-        qw.eq("user_name",userName);
-        qw.eq("password",password);
+        qw.eq("mobile_phone",mobilePhone);
         TUser user = this.getOne(qw);
+
         if(user == null){
-            result.put("message","用户不存在");
-            return result;
+            return Result.fail("用户不存在");
         }else{
+            //重置session
             session.removeAttribute(Const.SESSION_USER);
             session.setAttribute(Const.SESSION_USER,user);
         }
 
-        result.put("success",true);
-        result.put("message","登录成功");
-        return result;
+        return Result.success("登录成功");
     }
 
 }

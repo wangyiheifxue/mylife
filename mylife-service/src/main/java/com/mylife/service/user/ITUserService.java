@@ -4,6 +4,7 @@ import com.mylife.bean.qo.user.UserQO;
 import com.mylife.bean.vo.user.UserVO;
 import com.mylife.entity.user.TUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mylife.util.Result;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -28,6 +29,13 @@ public interface ITUserService extends IService<TUser> {
      **/
     List<UserVO> listUser(UserQO qo);
 
-    Map<String,Object> loginByUserName(HttpSession session, String userName, String password, String verificationCode);
+    /**
+     * @description : 使用手机号登录
+     * @author : wyh
+     * @date : 2020/9/2 10:19
+     * @params : [session, mobilePhone, verificationCode]
+     * @return : com.mylife.util.Result
+     **/
+    Result loginByMobilePhone(HttpSession session, String mobilePhone, String verificationCode);
 
 }

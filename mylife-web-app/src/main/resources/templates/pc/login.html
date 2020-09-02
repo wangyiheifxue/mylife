@@ -3,7 +3,7 @@
 <head>
     <title>我的人生</title>
     <#include "/common/pcVersion.html"/>
-    <style lang="scss" scoped>
+    <style>
         .login-box {
             border: 1px solid #DCDFE6;
             width: 350px;
@@ -25,12 +25,12 @@
 <body>
     <div id="app">
         <el-form ref="loginForm" :model="form" :rules="rules" label-width="80px" class="login-box" @keydown.enter.native="doLogin('loginForm')">
-            <h3 class="login-title">欢迎登录</h3>
-            <el-form-item label="账号" prop="userName">
-                <el-input type="text" placeholder="请输入账号" v-model="form.userName"/>
+            <h3 class="login-title">欢迎登录我的人生</h3>
+            <el-form-item label="手机号" prop="mobilePhone">
+                <el-input type="text" placeholder="请输入手机号" v-model="form.mobilePhone"/>
             </el-form-item>
-            <el-form-item label="密码" prop="password">
-                <el-input type="password" placeholder="请输入密码" v-model="form.password" />
+            <el-form-item label="验证码" prop="verificationCode">
+                <el-input type="password" placeholder="请输入验证码" v-model="form.verificationCode" />
             </el-form-item>
             <el-form-item>
                 <el-button style="width:40%;" type="primary" @click="doLogin('loginForm')">登录</el-button>
@@ -43,17 +43,16 @@
         data() {
             return {
                 form:{
-                    userName:'',
-                    password:'',
-                    verificationCode:'wyh',
+                    mobilePhone:'',
+                    verificationCode:'mylife',
                 },
                 // 表单验证，需要在 el-form-item 元素中增加 prop 属性
                 rules: {
-                    username: [
-                        {required: true, message: '账号不可为空', trigger: 'blur'}
+                    mobilePhone: [
+                        {required: true, message: '手机号不可为空', trigger: 'blur'}
                     ],
-                    password: [
-                        {required: true, message: '密码不可为空', trigger: 'blur'}
+                    verificationCode: [
+                        {required: true, message: '验证码不可为空', trigger: 'blur'}
                     ]
                 },
             }
@@ -61,11 +60,10 @@
         methods: {
             //登录
             doLogin(formName) {
-                console.log('doLogin!');
                 // 为表单绑定验证功能
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$http.get('/login/doLogin',{
+                        this.$http.get('/login/loginByMobilePhone',{
                             params:this.form
                         }).then(function (res) {
                             if(res.body.success){

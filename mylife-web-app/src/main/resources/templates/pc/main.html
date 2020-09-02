@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>查看工作记录</title>
+    <#include "/common/pcVersion.html"/>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        .el-header {
+            background-color: #B3C0D1;
+            color: #333;
+            line-height: 60px;
+        }
+        .el-aside {
+            color: #333;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 62px;
+            bottom: 0;
+        }
+        .el-main {
+            position: absolute;
+            left: 200px;
+            right: 0;
+            top: 62px;
+            bottom: 0;
+            overflow-y: scroll;
+        }
+        /* iframe */
+        .iframe-v1 {
+            position: relative;
+            max-width: 100%;
+            height: -webkit-calc(100vh - 160px);
+            height: calc(100vh - 160px);
+            overflow: hidden;
+        }
+        .iframe-v1 iframe {
+            border: 0;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container style="height: 100%; border: 1px solid #eee">
+        <!-- 顶栏容器 -->
+        <el-header style="text-align: right; font-size: 12px">
+            <el-dropdown trigger="click">
+                <i class="el-icon-setting" style="margin-right: 15px"></i>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <span>{{user.realName}}</span>
+        </el-header>
+
+        <el-container><!---->
+            <!-- 侧边栏容器 -->
+            <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+                <el-menu>
+                    <el-submenu v-for="(menu,index) in menus" :index="index">
+                        <template slot="title">
+                            <i :class="menu.icon"></i>
+                            <span>{{menu.title}}</span>
+                        </template>
+                        <el-menu-item v-for="(subMenu,idx) in menu.subMenus" :index="index + '-' + idx"
+                                      @click="handleTabsEdit(index + '-' + idx,'add',subMenu.title,subMenu.url)">{{subMenu.title}}
+                        </el-menu-item>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+            <!-- 主要区域容器 -->
+            <el-main style="overflow: hidden;">
+                <el-tabs v-model="activeIndex" type="card" closable @edit="handleTabsEdit">
+                    <el-tab-pane
+                            class="iframe-v1"
+                            v-for="(tab, index) in tabs"
+                            :key="tab.name"
+                            :label="tab.title"
+                            :name="tab.name"
+                    >
+                        <iframe :src="tab.url" width="100%" height="100%" scrolling="auto" frameborder="0"></iframe>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-main>
+
+        </el-container>
+    </el-container>
+</div>
+<script>
+    var v_home = {
+        data() {
+            return {
+                //用户信息
+                user:{},
+                //菜单s
+                menus:[
+                    {
+                        title:'用户管理',
+                        icon:'el-icon-menu',
+                        subMenus:[
+                            {
+                                title:'用户列表',
+                                url:'view?url=/pc/employee/employeeList'
+                            }
+                        ]
+                    }
+                ],
+                //标签页相关数据
+                indexSeq:1,//历史标签序号
+                activeIndex: 1,//
+                tabs: [
+                    {
+                        title: '我的首页',
+                        name: 1,
+                        index:1,
+                        url: 'view?url=webSocket',
+                    }
+                ],
+            }
+        },
+        mounted() {
+            this.$nextTick(function () {
+                this.getCurUserInfo();
+            });
+        },
+        methods: {
+            //获取当前登录用户的信息
+            getCurUserInfo:function(){
+                this.$http.get("/user/get").then(function (res) {
+                    res = res.body;
+                    if (res.success) {
+                        this.user = res.data;
+                    }
+                }, function (res) {
+                });
+            },
+            //增删标签页
+            handleTabsEdit(index,action,title,url) {
+                let that = this;
+                if(action === 'add'){
+                    let activeIndex;
+
+                    //判断是否已存在
+                    let exist = false;
+                    this.tabs.forEach(tab => {
+                        if(tab.index == index){
+                            exist = true;
+                            activeIndex = tab.name;
+                        }
+                    });
+
+                    //不存在
+                    if(!exist){
+                        activeIndex = ++this.indexSeq + '';
+                        this.tabs.push({
+                            title: title,
+                            name: activeIndex,
+                            index:index,
+                            url: url,
+                        });
+                    }
+
+                    this.activeIndex = activeIndex;
+                }else if(action === 'remove'){
+                    //首页不可关闭
+                    if(index == 1){
+                        return;
+                    }
+                    let tabs = this.tabs;
+                    let activeName = this.activeIndex;
+                    //删除的是激活标签
+                    if (activeName == index) {
+                        tabs.forEach((tab, idx) => {
+                            if (tab.name == index) {
+                                let nextTab = tabs[idx + 1] || tabs[idx - 1];
+                                if (nextTab) {
+                                    activeName = nextTab.name;
+                                }
+                            }
+                        });
+                        this.activeIndex = activeName;
+                    }
+
+                    this.tabs = tabs.filter(tab => tab.name !== index);
+                }
+            },
+            //退出
+            logout:function () {
+                window.location = '/login/logout';
+            }
+        }
+    };
+    var Ctor = Vue.extend(v_home);
+    new Ctor().$mount('#app');
+</script>
+</body>
+</html>
+

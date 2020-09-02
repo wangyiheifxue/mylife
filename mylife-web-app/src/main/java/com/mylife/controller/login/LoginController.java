@@ -2,8 +2,8 @@ package com.mylife.controller.login;
 
 import com.mylife.constant.Const;
 import com.mylife.constant.UrlConst;
-import com.mylife.entity.user.TUser;
 import com.mylife.service.user.ITUserService;
+import com.mylife.util.Result;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/login")
@@ -25,6 +24,7 @@ public class LoginController {
     public static Log log = LogFactory.getLog(LoginController.class);
     @Autowired
     private ITUserService userService;
+
     /**
      * 登录控制
      * @param session
@@ -45,17 +45,16 @@ public class LoginController {
     }
 
     /**
-     *  根据用户名登录
-     * @param session
-     * @param userName
-     * @param password
-     * @param verificationCode
-     * @return
-     */
-    @RequestMapping("/doLogin")
+     * @description : 使用手机号登录
+     * @author : wyh
+     * @date : 2020/9/2 10:19
+     * @params : [session, mobilePhone, verificationCode]
+     * @return : com.mylife.util.Result
+     **/
+    @RequestMapping("/loginByMobilePhone")
     @ResponseBody
-    public Object doLogin(HttpSession session, @RequestParam String userName, @RequestParam String password,@RequestParam String verificationCode){
-        return userService.loginByUserName(session,userName,password,verificationCode);
+    public Result loginByMobilePhone(HttpSession session, @RequestParam String mobilePhone, @RequestParam String verificationCode){
+        return userService.loginByMobilePhone(session,mobilePhone,verificationCode);
     }
 
     /**
@@ -75,13 +74,13 @@ public class LoginController {
     }
 
     /**
-     *  构建重定向
+     * 构建重定向
      * @param session
      * @param response
      * @throws Exception
      */
     private void buildRedirect(HttpSession session,HttpServletResponse response) throws Exception{
-        TUser user = (TUser) session.getAttribute(Const.SESSION_USER);
-        response.sendRedirect(UrlConst.HOME_URL);
+//        TUser user = (TUser) session.getAttribute(Const.SESSION_USER);
+        response.sendRedirect(UrlConst.MAIN_URL);
     }
 }
