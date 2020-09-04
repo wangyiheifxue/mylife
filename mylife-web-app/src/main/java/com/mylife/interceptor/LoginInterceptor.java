@@ -1,7 +1,9 @@
 package com.mylife.interceptor;
 
+import com.mylife.annotation.PassLogin;
 import com.mylife.constant.Const;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,16 +19,23 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Object sessionUser = request.getSession().getAttribute(Const.SESSION_USER);
-        if(sessionUser == null){
-            System.out.println(request.getRequestURI());
-            System.out.println(request.getRequestURL());
+        if(handler instanceof HandlerMethod){
+            //PassLogin注解放过拦截
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            PassLogin passLogin = handlerMethod.getMethodAnnotation(PassLogin.class);
+            if(passLogin != null){
+                return true;
+            }else{
+                Object sessionUser = request.getSession().getAttribute(Const.SESSION_USER);
+                if(sessionUser == null){
 //            request.getSession().invalidate();
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            request.getRequestDispatcher("/login").forward(request,response);
-//            response.sendRedirect("/login");
-            return false;
+                    //使用转发跳转登录页面
+                    request.getRequestDispatcher("/login").forward(request,response);
+                    return false;
+                }
+            }
         }
+
         return true;
     }
 }
