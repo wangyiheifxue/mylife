@@ -14,9 +14,9 @@ spring:
     suffix: .html
     charset: UTF-8
   mvc:
-    static-path-pattern: /**
+    static-path-pattern: /static/**
   resources:
-    static-locations: classpath:/resources/,classpath:/static/
+    static-locations: classpath:/static/
 
 server:
   tomcat:
