@@ -30,6 +30,15 @@ public interface ITUserService extends IService<TUser> {
     List<UserVO> listUser(UserQO qo);
 
     /**
+     * @description : 计数 用户
+     * @author : wyh
+     * @date : 2020/9/2 11:35
+     * @params : [qo]
+     * @return : java.lang.Integer
+     **/
+    Integer countUser(UserQO qo);
+
+    /**
      * @description : 使用手机号登录
      * @author : wyh
      * @date : 2020/9/2 10:19

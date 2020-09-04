@@ -14,7 +14,7 @@ public class Result<T> {
      */
     private boolean success;
     /**
-     * 消息（失败状态码描述、请求失败信息、异常信息）
+     * 消息（请求结果信息，失败状态码描述、异常信息）
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY) //jackson实体转json，为NULL的字段不参加序列化
     private String message;
@@ -48,7 +48,7 @@ public class Result<T> {
         return new Result<>(true, message);
     }
 
-    public static <T> Result<T> success(T data) {
+    public static <T> Result<T> data(T data) {
         return new Result<>(true, data);
     }
 

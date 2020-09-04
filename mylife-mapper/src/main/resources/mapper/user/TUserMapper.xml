@@ -29,7 +29,6 @@
         <if test="nickname != null and !''.equals(nickname)">
             and a.nickname like concat('%',#{nickname},'%')
         </if>
-
     </sql>
 
     <select id="listUser" resultType="com.mylife.bean.vo.user.UserVO">
@@ -38,9 +37,17 @@
         <where>
             <include refid="commonSql"></include>
         </where>
-        <if test="page != null and pageSize != null">
-            limit #{page},#{pageSize}
+        <if test="startRow != null and pageSize != null">
+            limit #{startRow},#{pageSize}
         </if>
+    </select>
+
+    <select id="countUser" resultType="java.lang.Integer">
+        select count(*)
+        from t_user a
+        <where>
+            <include refid="commonSql"></include>
+        </where>
     </select>
 
 </mapper>

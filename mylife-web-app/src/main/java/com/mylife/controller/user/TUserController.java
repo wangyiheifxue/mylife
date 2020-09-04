@@ -40,7 +40,7 @@ public class TUserController {
      **/
     @GetMapping("/get")
     public Result get(HttpSession session){
-        return Result.success(session.getAttribute(Const.SESSION_USER));
+        return Result.data(session.getAttribute(Const.SESSION_USER));
     }
 
     /**
@@ -52,7 +52,7 @@ public class TUserController {
      **/
     @GetMapping("/get/{id}")
     public Result getById(HttpSession session,@PathVariable("id") Long id){
-        return Result.success(userService.getById(id));
+        return Result.data(userService.getById(id));
     }
 
     /**
@@ -64,8 +64,19 @@ public class TUserController {
      **/
     @RequestMapping("/list")
     public Result listUser(HttpSession session, UserQO qo){
-        return Result.success(userService.listUser(qo));
+        return Result.data(userService.listUser(qo));
     }
 
+    /**
+     * @description : 计数 用户
+     * @author : wyh
+     * @date : 2020/9/2 11:36
+     * @params : [session, qo]
+     * @return : com.mylife.util.Result
+     **/
+    @RequestMapping("/count")
+    public Result countUser(HttpSession session, UserQO qo){
+        return Result.data(userService.countUser(qo));
+    }
 }
 

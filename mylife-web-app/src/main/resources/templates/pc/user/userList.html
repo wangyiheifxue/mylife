@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>用户管理</title>
+    <#include "/common/pcVersion.html"/>
+</head>
+<body>
+<div id="app">
+    <template>
+        <!-- 查询表单 -->
+        <el-form :inline="true" :model="searchForm" ref="searchForm" class="demo-form-inline">
+            <el-form-item label="姓名" prop="realName">
+                <el-input v-model="searchForm.realName" placeholder="输入姓名或电话" clearable></el-input>
+            </el-form-item>
+<!--            <el-form-item label="进度" prop="scheduleStatus">-->
+<!--                <el-select v-model="searchForm.scheduleStatus" placeholder="进度">-->
+<!--                    <el-option label="全部" value=""></el-option>-->
+<!--                    <el-option label="已结束" value="1"></el-option>-->
+<!--                    <el-option label="未结束" value="0"></el-option>-->
+<!--                </el-select>-->
+<!--            </el-form-item>-->
+            <el-form-item label="创建日期" prop="beginCreateTime">
+                <el-col :span="11">
+                    <el-date-picker type="date" placeholder="选择创建日期" v-model="searchForm.beginCreateTime"
+                                    value-format="yyyy-MM-dd"></el-date-picker>
+                </el-col>
+            </el-form-item>
+            <br>
+            <el-form-item>
+                <el-button type="primary" @click="listData">查询</el-button>
+                <el-button @click="resetForm('searchForm')">重置</el-button>
+                <el-button type="success" @click="downloadData">下载</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!-- 表格 -->
+        <el-table
+                ref="multipleTable"
+                :data="tableData"
+                tooltip-effect="dark"
+                style="width: 100%"
+                border
+                stripe
+                @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column label="姓名" prop="realName" width="80" align="center"></el-table-column>
+            <el-table-column label="昵称" prop="nickname" width="150" align="center"></el-table-column>
+<!--            <el-table-column label="工时方式" prop="workingRecord.calculationType" width="90" align="center" :formatter="formatterCol"></el-table-column>-->
+            <el-table-column label="操作" width="150" align="center">
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            @click="handleCol('update', scope.$index, scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <!-- 分页工具 -->
+        <div class="block">
+            <el-pagination
+                    layout="total, sizes, prev, pager, next, jumper"
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="searchForm.page"
+                    :page-sizes="[5, 10, 15]"
+                    :page-size="5"
+                    :total="total">
+            </el-pagination>
+        </div>
+    </template>
+
+    <!-- 编辑抽屉 -->
+    <el-drawer
+            title="编辑用户"
+            direction="rtl"
+            ref="updateDrawer"
+            :before-close="cancelUpdateData"
+            :visible.sync="updateDrawer.open"
+            custom-class="demo-drawer"
+            size="35%"
+    >
+        <div class="demo-drawer__content">
+            <el-form :model="updateForm">
+                <el-form-item label="姓名" :label-width="updateDrawer.formLabelWidth">
+                    <el-input :value="updateForm.realName" readonly></el-input>
+                </el-form-item>
+                <el-form-item label="昵称" :label-width="updateDrawer.formLabelWidth">
+                    <el-input :value="updateForm.nickname" readonly></el-input>
+                </el-form-item>
+            </el-form>
+            <div class="demo-drawer__footer">
+                <el-button @click="cancelUpdateData">取 消</el-button>
+                <el-button type="primary" @click="updateData" :loading="updateDrawer.loading">
+                    {{updateDrawer.loading ? '提交中 ...' : '确 定' }}
+                </el-button>
+            </div>
+        </div>
+    </el-drawer>
+</div>
+<script>
+    var v_main = {
+        data() {
+            return {
+                mainUrl:'/user',
+                //-----查询表单
+                searchForm: {
+                    //表单数据
+                    realName:'',
+                    beginCreateTime:formatDateByPattern(new Date(),'yyyy-MM-dd'),
+                    endCreateTime:formatDateByPattern(new Date(),'yyyy-MM-dd'),
+
+                    //默认数据
+                    page:1,
+                    pageSize:5,
+                },
+
+                //-----表格
+                tableData: [], //表格数据
+                total:0, //表格数据总数
+                multipleSelection: [],//表格已选
+
+                //-----编辑功能相关字段
+                updateDrawer:{
+                    open:false,//打开状态
+                    loading:false,//表单提交中
+                    formLabelWidth: '80px',
+                },
+                updateForm: {
+                    id:'',
+                    realName:'',
+                    nickName:'',
+                },
+            }
+        },
+        watch:{
+            //创建时间-开始 变化
+            "searchForm.beginCreateTime": {
+                handler(newVal, oldVal) {
+                    this.searchForm.endCreateTime = newVal;
+                },
+                immediate: true
+            }
+        },
+        mounted() {
+            this.$nextTick(function () {
+                this.listData();
+                console.log(formatDateByPattern(new Date(),'yyyy-MM-dd'));
+            });
+        },
+        methods: {
+            //验证搜索表单
+            validateSearchFrom:function(){
+                return true;
+            },
+            //查询数据
+            listData:function(pageChange){
+                //验证搜索表单
+                if(!this.validateSearchFrom()){
+                    return;
+                }
+                
+                //非 分页查询-页码数 改变
+                if(1 !== pageChange){
+                    this.searchForm.page = 1; //重置 分页查询-页码数
+                    this.countData(); //计数数据
+                }
+
+                this.$http.get(this.mainUrl + '/list',{
+                    params:this.searchForm
+                }).then(function (res) {
+                    this.tableData = res.body.data || [];
+                }, function (error) {
+                });
+            },
+            //计数数据
+            countData:function(){
+                this.$http.get(this.mainUrl + '/count',{
+                    params:this.searchForm
+                }).then(function (res) {
+                    this.total = res.body.data;
+                }, function (error) {
+                });
+            },
+            //表格 选择/取消选择 单行
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            //重置表单
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.searchForm.endCreateTime = '';
+            },
+            //下载数据
+            downloadData:function(){
+                if(!this.validateSearchFrom()){
+                    return;
+                }
+                downloadFile(this.mainUrl + '/download',this.searchForm);
+            },
+            //格式化表格列
+            formatterCol:function (row, column, cellValue, index) {
+                // if (column.property === "workingRecord.calculationType") {
+                //     return cellValue == 1 ? '按计时' : '按计件';
+                // }
+            },
+            //操作列
+            handleCol:function(type,index,row){
+                switch (type) {
+                    case 'update'://编辑
+                        this.$http.get("/working/record/" + row.workingRecord.id).then(function (res) {
+                            if (res.body.code == 1) {
+                                let data = res.body.data;
+                                //-----工作记录
+                                for(let key in this.updateForm){
+                                    if(data.workingRecord[key]){
+                                        this.updateForm[key] = data.workingRecord[key];
+                                    }
+                                }
+                                //赋值 开始、结束时间
+                                this.updateForm.beginTime = formatDateByPattern(data.workingRecord.workBeginTime,'HH:mm');
+                                this.updateForm.endTime = formatDateByPattern(data.workingRecord.workEndTime,'HH:mm');
+                                //姓名
+                                this.updateForm.realName = data.worker.realName;
+
+                                //-----工作记录明细
+                                if(data.recordItems){
+                                    let changeCalculationItemList = data.workingRecord.calculationType == 1 ?
+                                        this.calculationItemList1 : this.calculationItemList2;
+                                    for(let ci of changeCalculationItemList){
+                                        for(let ri of data.recordItems){
+                                            if(ri.itemCode == ci.itemCode){
+                                                ci.defaultValue = ri.quantity;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                //-----预计算 按计时-工作工时
+                                if(this.updateForm.calculationType == 2){
+                                    this.calculateWorkHours();
+                                }
+                                //-----开启编辑抽屉
+                                this.updateDrawer.open = true;
+                            } else {
+
+                            }
+                        }, function (error) {
+                        });
+                        break;
+                    default:
+                        break;
+                }
+
+            },
+            //分页查询-每页条数 改变
+            handleSizeChange(val) {
+                this.searchForm.page = 1;
+                this.searchForm.pageSize = val;
+                this.listData();
+            },
+            //分页查询-页码数 改变
+            handleCurrentChange(val) {
+                this.searchForm.page = val;
+                this.listData(1);
+            },
+            //取消修改数据
+            cancelUpdateData() {
+                this.updateDrawer.loading = false;
+                this.updateDrawer.open = false;
+            },
+            //修改数据
+            updateData:function () {
+                if (this.updateDrawer.loading) {
+                    return;
+                }
+                this.updateDrawer.loading = true;
+                //请求参数
+                let reqParam = this.updateForm;
+                if(reqParam.workQuantity < 0){
+                    this.$message({
+                        type: 'error',
+                        message: '工时数必须大于0',
+                        duration:1500,
+                        showClose: true,
+                        center:true,
+                    });
+                    return;
+                }
+                reqParam.workBeginTime = formatDateByPattern(reqParam.workBeginTime, 'yyyy-MM-dd') + " " +reqParam.beginTime + ":00";
+                reqParam.workEndTime = formatDateByPattern(reqParam.workEndTime, 'yyyy-MM-dd') + " " + reqParam.endTime + ":00";
+                reqParam.calculationItemStrs = JSON.stringify(reqParam.calculationType == 1 ? this.calculationItemList1 : this.calculationItemList2);
+                this.$http.put(this.mainUrl + '/update/' + this.updateForm.id, reqParam, {emulateJSON: true}).then(function (res) {
+                    if (res.body.code == 1) {
+                        let data = res.body.data;
+                        if (data.success) {
+                            this.$message({
+                                type: 'success',
+                                message: data.msg,
+                                duration:1500,
+                                showClose: true,
+                                center:true,
+                            });
+                            //动画关闭需要一定的时间
+                            setTimeout(() => {
+                                this.cancelUpdateData();
+                                //重新查询表格
+                                this.listData();
+                            }, 400);
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: data.msg,
+                                duration:1500,
+                                showClose: true,
+                                center:true,
+                            });
+                        }
+                    } else {
+                    }
+                }, function (res) {
+                });
+
+            },
+        }
+    };
+    var Ctor = Vue.extend(v_main);
+    new Ctor().$mount('#app');
+</script>
+</body>
+</html>
+

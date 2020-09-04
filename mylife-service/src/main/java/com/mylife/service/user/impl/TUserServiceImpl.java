@@ -33,8 +33,12 @@ public class TUserServiceImpl extends ServiceImpl<TUserMapper, TUser> implements
     }
 
     @Override
-    public Result loginByMobilePhone(HttpSession session, String mobilePhone, String verificationCode) {
+    public Integer countUser(UserQO qo) {
+        return baseMapper.countUser(qo);
+    }
 
+    @Override
+    public Result loginByMobilePhone(HttpSession session, String mobilePhone, String verificationCode) {
         //-----参数检测
         if(StringUtils.isBlank(mobilePhone)){
             return Result.fail("手机号不能为空");

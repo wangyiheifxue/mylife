@@ -26,4 +26,13 @@ public interface TUserMapper extends MyBaseMapper<TUser> {
      **/
     List<UserVO> listUser(UserQO qo);
 
+    /**
+     * @description : 计数 用户
+     * @author : wyh
+     * @date : 2020/9/2 11:35
+     * @params : [qo]
+     * @return : java.lang.Integer
+     **/
+    Integer countUser(UserQO qo);
+
 }
