@@ -7,6 +7,10 @@ import lombok.Setter;
 @Getter
 public class BaseQO {
     /**
+     * 用户id
+     */
+    protected Long userId;
+    /**
      * 分页查询-页码数
      */
     protected Integer page;

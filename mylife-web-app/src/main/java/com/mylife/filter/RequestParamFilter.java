@@ -1,6 +1,8 @@
 package com.mylife.filter;
 
+import com.mylife.constant.Const;
 import com.mylife.constant.DateTimeConst;
+import com.mylife.entity.user.TUser;
 import com.mylife.util.DateTimeUtil;
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,7 +52,7 @@ public class RequestParamFilter implements Filter {
         public ChangeRequestParamWrapper(HttpServletRequest request) {
             super(request);
             this.parameterMap.putAll(request.getParameterMap());
-            this.autoSetCustomParameters();
+            this.autoSetCustomParameters(request);
         }
 
         /**
@@ -113,8 +115,13 @@ public class RequestParamFilter implements Filter {
 
         /**
          * 自动设置自定义参数
+         * @param request
          */
-        public void autoSetCustomParameters(){
+        public void autoSetCustomParameters(HttpServletRequest request){
+            //-----公共参数 userId
+            TUser user = (TUser) request.getSession().getAttribute(Const.SESSION_USER);
+            addParameter("userId",user.getId());
+
             //-----自动设置 mysql分页查询 开始行数（startRow）
             if(StringUtils.isNotBlank(getParameter("page"))){
                 String pageSizeStr = getParameter("pageSize");
