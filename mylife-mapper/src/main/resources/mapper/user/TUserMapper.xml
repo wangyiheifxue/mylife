@@ -12,9 +12,11 @@
         <result column="id_no" property="idNo" />
         <result column="email" property="email" />
         <result column="mobile_phone" property="mobilePhone" />
-        <result column="create_time" property="createTime" />
         <result column="enable" property="enable" />
         <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_userId" property="updateUserId" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <sql id="commonSql">

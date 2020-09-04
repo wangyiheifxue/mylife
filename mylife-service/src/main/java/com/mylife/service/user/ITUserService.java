@@ -47,4 +47,13 @@ public interface ITUserService extends IService<TUser> {
      **/
     Result loginByMobilePhone(HttpSession session, String mobilePhone, String verificationCode);
 
+    /**
+     * @description : 更新 用户
+     * @author : wyh
+     * @date : 2020/9/4 15:07
+     * @params : [operator, user]
+     * @return : com.mylife.util.Result
+     **/
+    Result updateUser(TUser operator,TUser user);
+
 }

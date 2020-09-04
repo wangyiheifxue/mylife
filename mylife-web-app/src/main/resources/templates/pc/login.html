@@ -49,10 +49,10 @@
                 // 表单验证，需要在 el-form-item 元素中增加 prop 属性
                 rules: {
                     mobilePhone: [
-                        {required: true, message: '手机号不可为空', trigger: 'blur'}
+                        {required: true, message: '手机号不能为空', trigger: 'blur'}
                     ],
                     verificationCode: [
-                        {required: true, message: '验证码不可为空', trigger: 'blur'}
+                        {required: true, message: '验证码不能为空', trigger: 'blur'}
                     ]
                 },
             }
@@ -68,6 +68,14 @@
                         }).then(function (res) {
                             if(res.body.success){
                                 location.href = '/login';
+                            }else{
+                                this.$message({
+                                    type: 'error',
+                                    message: res.body.message,
+                                    duration:1500,
+                                    showClose: true,
+                                    center:true,
+                                });
                             }
                         })
                     } else {

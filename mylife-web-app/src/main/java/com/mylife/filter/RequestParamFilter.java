@@ -119,8 +119,10 @@ public class RequestParamFilter implements Filter {
          */
         public void autoSetCustomParameters(HttpServletRequest request){
             //-----公共参数 userId
-            TUser user = (TUser) request.getSession().getAttribute(Const.SESSION_USER);
-            addParameter("userId",user.getId());
+            Object sessionUser = request.getSession().getAttribute(Const.SESSION_USER);
+            if(sessionUser != null){
+                addParameter("userId", ((TUser)sessionUser).getId());
+            }
 
             //-----自动设置 mysql分页查询 开始行数（startRow）
             if(StringUtils.isNotBlank(getParameter("page"))){

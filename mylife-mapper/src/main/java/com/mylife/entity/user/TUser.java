@@ -75,10 +75,22 @@ public class TUser extends Model<TUser> {
      * 是否可用：0：否；1：是；默认1；
      */
     private Integer enable;
+
     /**
      * 数据逻辑状态：0：逻辑删除；1：有效数据；默认1；
      */
     private Integer status;
+
+    /**
+     * 更新用户id
+     */
+    private Long updateUserId;
+    /**
+     * 创建时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private LocalDateTime updateTime;
 
     @Override
     protected Serializable pkVal() {

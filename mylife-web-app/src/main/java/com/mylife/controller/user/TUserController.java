@@ -2,14 +2,12 @@ package com.mylife.controller.user;
 
 import com.mylife.bean.qo.user.UserQO;
 import com.mylife.constant.Const;
+import com.mylife.entity.user.TUser;
 import com.mylife.redis.RedisService;
 import com.mylife.service.user.ITUserService;
 import com.mylife.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -77,6 +75,19 @@ public class TUserController {
     @RequestMapping("/count")
     public Result countUser(HttpSession session, UserQO qo){
         return Result.data(userService.countUser(qo));
+    }
+
+    /**
+     * @description : 更新 用户
+     * @author : wyh
+     * @date : 2020/9/4 15:15
+     * @params : [session, user]
+     * @return : com.mylife.util.Result
+     **/
+    @PutMapping("/update")
+    public Result countUser(HttpSession session, TUser user){
+        TUser operator = (TUser) session.getAttribute(Const.SESSION_USER);
+        return userService.updateUser(operator,user);
     }
 }
 
