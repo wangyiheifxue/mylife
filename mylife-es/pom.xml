@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mylife</groupId>
-    <artifactId>mylife-service</artifactId>
+    <artifactId>mylife-es</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>mylife-service</name>
+    <name>mylife-es</name>
     <packaging>jar</packaging>
-    <description>mylife 接口模块</description>
+    <description>mylife-es</description>
 
     <parent>
         <groupId>com.mylife</groupId>
@@ -17,28 +17,17 @@
         <relativePath>../mylife-dependencies/pom.xml</relativePath>
     </parent>
 
-
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <!-- mylife工具包 -->
         <dependency>
             <groupId>com.mylife</groupId>
-            <artifactId>mylife-mapper</artifactId>
+            <artifactId>mylife-util</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.mylife</groupId>
-            <artifactId>mylife-es</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.mylife</groupId>
-            <artifactId>framework</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
-
 
 </project>

@@ -1,11 +1,14 @@
 package com.mylife.controller.user;
 
+import com.mylife.bean.user.SUser;
 import com.mylife.bean.qo.user.UserQO;
 import com.mylife.constant.Const;
 import com.mylife.entity.user.TUser;
 import com.mylife.redis.RedisService;
 import com.mylife.service.user.ITUserService;
+import com.mylife.service.user.SUserService;
 import com.mylife.util.Result;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,9 @@ public class TUserController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private SUserService sUserService;
 
     /**
      * @description : 从session中获取我的用户信息
@@ -89,5 +95,25 @@ public class TUserController {
         TUser operator = (TUser) session.getAttribute(Const.SESSION_USER);
         return userService.updateUser(operator,user);
     }
+
+    @RequestMapping("/testES")
+    public Result countUser(HttpSession session,Integer type){
+        TUser operator = (TUser) session.getAttribute(Const.SESSION_USER);
+        Object result = null;
+        switch (type){
+            case 1:
+                SUser sUser = new SUser();
+                BeanUtils.copyProperties(operator,sUser);
+                result = sUserService.save(sUser);
+                break;
+            case 2:
+                sUserService.delete(operator.getId());
+                break;
+            case 3:
+                break;
+        }
+        return Result.data(result);
+    }
+
 }
 
