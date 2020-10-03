@@ -1,4 +1,4 @@
-package com.mylife.repository;
+package com.mylife.repository.user;
 
 import com.mylife.bean.user.SUser;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

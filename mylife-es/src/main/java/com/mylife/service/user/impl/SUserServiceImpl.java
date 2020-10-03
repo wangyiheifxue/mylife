@@ -2,7 +2,7 @@ package com.mylife.service.user.impl;
 
 import com.mylife.bean.user.SUser;
 import com.mylife.bean.user.SUserQO;
-import com.mylife.repository.UserRepository;
+import com.mylife.repository.user.UserRepository;
 import com.mylife.service.user.SUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
