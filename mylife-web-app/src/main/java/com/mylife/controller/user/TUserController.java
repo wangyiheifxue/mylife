@@ -2,6 +2,7 @@ package com.mylife.controller.user;
 
 import com.mylife.bean.user.SUser;
 import com.mylife.bean.qo.user.UserQO;
+import com.mylife.bean.user.SUserQO;
 import com.mylife.constant.Const;
 import com.mylife.entity.user.TUser;
 import com.mylife.redis.RedisService;
@@ -97,20 +98,32 @@ public class TUserController {
     }
 
     @RequestMapping("/testES")
-    public Result countUser(HttpSession session,Integer type){
-        TUser operator = (TUser) session.getAttribute(Const.SESSION_USER);
+    public Result countUser(HttpSession session,Integer type,SUserQO qo){
         Object result = null;
         switch (type){
             case 1:
+                TUser user = userService.getById(1);
                 SUser sUser = new SUser();
-                BeanUtils.copyProperties(operator,sUser);
+                BeanUtils.copyProperties(user,sUser);
+                sUserService.save(sUser);
+
+                user = userService.getById(2);
+                sUser = new SUser();
+                BeanUtils.copyProperties(user,sUser);
+
                 result = sUserService.save(sUser);
                 break;
             case 2:
-                sUserService.delete(operator.getId());
+                sUserService.delete(1);
+                sUserService.delete(2);
                 break;
             case 3:
+                result = sUserService.list(qo);
                 break;
+            case 4:
+                result = sUserService.count(qo);
+                break;
+
         }
         return Result.data(result);
     }

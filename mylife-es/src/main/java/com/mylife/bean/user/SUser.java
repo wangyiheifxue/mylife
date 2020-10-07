@@ -5,13 +5,16 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
-@Document(indexName = "user", replicas = 0)
+@Document(indexName = SUser.INDEX, replicas = 0)
 public class SUser {
+    public static final String INDEX = "user";
 
     /**
      * 主键
@@ -22,6 +25,7 @@ public class SUser {
     /**
      * 用户名
      */
+    @Field(type = FieldType.Keyword)
     private String userName;
 
     /**
@@ -32,6 +36,7 @@ public class SUser {
     /**
      * 昵称
      */
+    @Field(type = FieldType.Text)
     private String nickname;
 
     /**
@@ -57,7 +62,7 @@ public class SUser {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime createTime;
 
     /**
@@ -77,8 +82,7 @@ public class SUser {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime updateTime;
-
 
 }

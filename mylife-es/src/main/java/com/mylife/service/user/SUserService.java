@@ -13,5 +13,5 @@ public interface SUserService {
 
     List<SUser> list(SUserQO qo);
 
-    int count(SUserQO qo);
+    long count(SUserQO qo);
 }
