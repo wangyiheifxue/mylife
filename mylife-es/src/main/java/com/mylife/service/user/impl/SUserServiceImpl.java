@@ -8,6 +8,7 @@ import com.mylife.service.user.SUserService;
 import com.mylife.util.ElasticsearchUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -55,11 +56,17 @@ public class SUserServiceImpl implements SUserService {
                     if(!highlightFieldMap.isEmpty()){
                         for (Map.Entry<String,List<String>> entry:highlightFieldMap.entrySet()) {
                             switch (entry.getKey()){
-                                case "userName":
-                                    sUser.setUserName(entry.getValue().toString());
-                                    break;
                                 case "nickname":
                                     sUser.setNickname(entry.getValue().toString());
+                                    break;
+                                case "realName":
+                                    sUser.setRealName(entry.getValue().toString());
+                                    break;
+                                case "mobilePhone":
+                                    sUser.setMobilePhone(entry.getValue().toString());
+                                    break;
+                                case "idNo":
+                                    sUser.setIdNo(entry.getValue().toString());
                                     break;
                             }
                         }
@@ -86,7 +93,7 @@ public class SUserServiceImpl implements SUserService {
      * @return
      */
     private Query getSearchQuery(SUserQO qo) {
-        BoolQueryBuilder boolQueryBuilder = buildBoolQuery(qo);
+        QueryBuilder boolQueryBuilder = buildQueryBuilder(qo);
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
         nativeSearchQueryBuilder
 //                .withIndicesOptions(IndicesOptions.LENIENT_EXPAND_OPEN)
@@ -108,27 +115,26 @@ public class SUserServiceImpl implements SUserService {
     }
 
     /**
-     * 构建buildBoolQuery
+     * 构建QueryBuilder
      * @param qo
      * @return
      */
-    private BoolQueryBuilder buildBoolQuery(SUserQO qo){
+    private QueryBuilder buildQueryBuilder(SUserQO qo){
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
         if(StringUtils.isNotBlank(qo.getKeywords())){
             BoolQueryBuilder subBoolQuery = QueryBuilders.boolQuery();
             subBoolQuery
-                    .should(QueryBuilders.matchQuery("userName",qo.getKeywords()))
-                    .should(QueryBuilders.matchPhrasePrefixQuery("nickname",qo.getKeywords()));
-//                    .should(QueryBuilders.matchPhrasePrefixQuery("realName",qo.getKeywords()))
-//                    .should(QueryBuilders.matchPhrasePrefixQuery("idNo",qo.getKeywords()))
-//                    .should(QueryBuilders.matchPhrasePrefixQuery("email",qo.getKeywords()))
-//                    .should(QueryBuilders.matchPhrasePrefixQuery("mobilePhone",qo.getKeywords()));
-            boolQueryBuilder.must(subBoolQuery);
+                    .should(QueryBuilders.wildcardQuery("nickname","*" + qo.getKeywords() + "*"))
+                    .should(QueryBuilders.wildcardQuery("realName","*" + qo.getKeywords() + "*"))
+                    .should(QueryBuilders.wildcardQuery("mobilePhone",qo.getKeywords() + "*"))
+                    .should(QueryBuilders.wildcardQuery("idNo","*" + qo.getKeywords() + "*"));
+
+            boolQueryBuilder.should(subBoolQuery);
         }
 
-        if(qo.getUserId() != null){
-            boolQueryBuilder.must(QueryBuilders.termQuery("id",qo.getUserId()));
+        if(qo.getEnable() != null){
+            boolQueryBuilder.must(QueryBuilders.termQuery("enable",qo.getEnable()));
         }
 
         return boolQueryBuilder;

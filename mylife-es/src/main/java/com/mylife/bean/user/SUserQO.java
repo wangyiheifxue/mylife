@@ -7,8 +7,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SUserQO extends SBaseQO {
-    /**
-     * 用户id
-     */
-    private Long userId;
+    private Integer enable;
 }
