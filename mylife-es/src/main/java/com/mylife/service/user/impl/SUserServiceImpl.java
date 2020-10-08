@@ -1,8 +1,8 @@
 package com.mylife.service.user.impl;
 
 import com.google.common.collect.Lists;
+import com.mylife.bean.qo.user.UserQO;
 import com.mylife.bean.user.SUser;
-import com.mylife.bean.user.SUserQO;
 import com.mylife.repository.user.UserRepository;
 import com.mylife.service.user.SUserService;
 import com.mylife.util.ElasticsearchUtil;
@@ -43,7 +43,7 @@ public class SUserServiceImpl implements SUserService {
     }
 
     @Override
-    public List<SUser> list(SUserQO qo) {
+    public List<SUser> list(UserQO qo) {
         List<SUser> sUserList = Lists.newArrayList();
         try {
             SearchHits<SUser> searchHits = esRestTemplate.search(this.getSearchQuery(qo),SUser.class);
@@ -82,7 +82,7 @@ public class SUserServiceImpl implements SUserService {
     }
 
     @Override
-    public long count(SUserQO qo) {
+    public long count(UserQO qo) {
         qo.setCountData(true);
         return esRestTemplate.count(this.getSearchQuery(qo),SUser.class);
     }
@@ -92,7 +92,7 @@ public class SUserServiceImpl implements SUserService {
      * @param qo
      * @return
      */
-    private Query getSearchQuery(SUserQO qo) {
+    private Query getSearchQuery(UserQO qo) {
         QueryBuilder boolQueryBuilder = buildQueryBuilder(qo);
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
         nativeSearchQueryBuilder
@@ -119,7 +119,7 @@ public class SUserServiceImpl implements SUserService {
      * @param qo
      * @return
      */
-    private QueryBuilder buildQueryBuilder(SUserQO qo){
+    private QueryBuilder buildQueryBuilder(UserQO qo){
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
         if(StringUtils.isNotBlank(qo.getKeywords())){

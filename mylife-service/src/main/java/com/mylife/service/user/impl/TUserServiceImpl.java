@@ -1,7 +1,6 @@
 package com.mylife.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Maps;
 import com.mylife.bean.qo.user.UserQO;
 import com.mylife.bean.vo.user.UserVO;
 import com.mylife.constant.Const;

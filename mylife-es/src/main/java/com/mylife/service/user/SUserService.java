@@ -1,7 +1,7 @@
 package com.mylife.service.user;
 
+import com.mylife.bean.qo.user.UserQO;
 import com.mylife.bean.user.SUser;
-import com.mylife.bean.user.SUserQO;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface SUserService {
 
     void delete(long id);
 
-    List<SUser> list(SUserQO qo);
+    List<SUser> list(UserQO qo);
 
-    long count(SUserQO qo);
+    long count(UserQO qo);
 }

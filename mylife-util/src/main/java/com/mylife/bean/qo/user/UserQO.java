@@ -7,9 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserQO extends BaseQO {
-
-    /**
-     * 昵称
-     */
     private String nickname;
+    private Integer enable;
 }

@@ -30,4 +30,8 @@ public class BaseQO {
      * 数据逻辑状态：0：逻辑删除；1：有效数据；默认1；
      */
     protected Integer status;
+    /**
+     * 是否是计数查询
+     */
+    protected boolean countData = false;
 }

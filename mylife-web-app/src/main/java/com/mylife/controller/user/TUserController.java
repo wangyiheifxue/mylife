@@ -2,7 +2,6 @@ package com.mylife.controller.user;
 
 import com.mylife.bean.user.SUser;
 import com.mylife.bean.qo.user.UserQO;
-import com.mylife.bean.user.SUserQO;
 import com.mylife.constant.Const;
 import com.mylife.entity.user.TUser;
 import com.mylife.redis.RedisService;
@@ -98,7 +97,7 @@ public class TUserController {
     }
 
     @RequestMapping("/testES")
-    public Result countUser(HttpSession session,Integer type,SUserQO qo){
+    public Result countUser(HttpSession session,Integer type,UserQO qo){
         Object result = null;
         switch (type){
             case 1:
