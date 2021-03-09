@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.mylife.mapper")
+@MapperScan("com.mylife.mapper") //mapper文件扫描路径
 public class MybatisPlusConfig {
 
     /**
